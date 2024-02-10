@@ -34,6 +34,20 @@ res = con.sql("SELECT g_country('193.198.212.8')")
 print(res)
 
 
+def g_city(ip_str: str) -> str:
+
+    try:
+        #print(ip_str)
+        response = reader.city(ip_str)
+        out = reader.city(ip_str).city.name
+    except geoip2.errors.AddressNotFoundError:
+        out = None
+    return out
+
+con.create_function("g_city", g_city, [str], str)
+
+con.sql("SELECT g_city('193.198.212.8')").show()
+
 
 r_asn = geoip2.database.Reader('geoip/GeoLite2-ASN.mmdb')
 
@@ -70,6 +84,10 @@ if len(sys.argv) > 2:
     print('# add g_asn')
     con.sql("alter table i add column g_asn varchar")
     con.sql("update i set g_asn=g_asn(ip)")
+
+    print('# add g_city')
+    con.sql("alter table i add column g_city varchar")
+    con.sql("update i set g_city=g_city(ip)")
 else:
     print("## SKIP re-create")
 
