@@ -33,6 +33,30 @@ con.create_function("g_country", g_country, [str], str)
 res = con.sql("SELECT g_country('193.198.212.8')")
 print(res)
 
+
+
+r_asn = geoip2.database.Reader('geoip/GeoLite2-ASN.mmdb')
+
+def g_asn(ip_str: str) -> str:
+
+    try:
+        #print(ip_str)
+        out = r_asn.asn(ip_str).autonomous_system_organization
+    except geoip2.errors.AddressNotFoundError:
+        out = None
+    return out
+
+con.create_function("g_asn", g_asn, [str], str)
+
+con.sql("SELECT g_asn('193.198.212.8')")
+
+
+
+
+
+
+
+
 # re-create only with second argument
 if len(sys.argv) > 2:
     print('# re-create table i')
@@ -42,6 +66,10 @@ if len(sys.argv) > 2:
     print('# add g_country')
     con.sql("alter table i add column g_country varchar")
     con.sql("update i set g_country=g_country(ip)")
+
+    print('# add g_asn')
+    con.sql("alter table i add column g_asn varchar")
+    con.sql("update i set g_asn=g_asn(ip)")
 else:
     print("## SKIP re-create")
 
@@ -56,6 +84,10 @@ print('# traffic from outside HR')
 con.sql("select site,i.g_country,count(*) as hits,sum(len) as sum_len from nginx join i using (ip) where i.g_country != 'HR' group by i.g_country,site order by sum_len desc limit 20").show()
 
 con.sql("select site,i.g_country,count(*) as hits,bar(count(*),50000,500000,10) as hbar ,sum(len) as sum_len from nginx join i using (ip) where i.g_country != 'HR' group by i.g_country,site order by hits desc limit 20").show()
+
+con.sql("select ip,i.g_country,count(*) as hits,bar(sum(len),899596907,4459835002,10) as hbar ,sum(len) as sum_len from nginx join i using (ip) where i.g_country != 'HR' group by i.g_country,ip order by sum_len desc limit 20").show()
+
+con.sql("select min(ip),max(ip),i.g_asn,count(*) as hits,bar(sum(len),2392228908,97177038409,10) as hbar ,sum(len) as sum_len from nginx join i using (ip) where i.g_country != 'HR' group by i.g_asn order by sum_len desc limit 20").show()
 
 #con.sql("")
 
