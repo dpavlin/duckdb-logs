@@ -2,8 +2,15 @@ Reading log files to duckdb
 
 # Import nginx log files into duckdb
 
-l.sql   - init schema
-l.sh    - import 
+## l.sql
+
+init schema from one existing log file
+
+## l.sh
+
+import data from log files, if run without parameters, if
+one log file is specified it will be just inserted
+
 
 # geoip.py
 
@@ -17,9 +24,10 @@ python3 geoip.py
 
 (venv) dpavlin@zamd:/zamd/dpavlin/duckdb$ python geoip.py reload
 
+
 # geo2.py
 
-dhckdb python udf functions which use geoip2 module and mmdb
+duckdb python udf functions which use geoip2 module and mmdb
 
 dpavlin@zamd:/zamd/dpavlin/duckdb-logs$ python -i geo2.py logs.duckdb rebuild
 
