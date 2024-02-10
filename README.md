@@ -16,3 +16,11 @@ dpavlin@zamd:/zamd/dpavlin/duckdb-logs$
 python3 geoip.py
 
 (venv) dpavlin@zamd:/zamd/dpavlin/duckdb$ python geoip.py reload
+
+# geo2.py
+
+dhckdb python udf functions which use geoip2 module and mmdb
+
+dpavlin@zamd:/zamd/dpavlin/duckdb-logs$ python -i geo2.py logs.duckdb rebuild
+
+dpavlin@zamd:/zamd/dpavlin/duckdb-logs$ python -i geo2.py logs.duckdb
