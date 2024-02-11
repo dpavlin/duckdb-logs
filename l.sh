@@ -22,6 +22,7 @@ if [ ! -z "$1" ] ; then
 	exit
 fi
 
+echo "$ re-create"
 rm logs.duckdb || true
 cat l.sql | ./duckdb logs.duckdb
 
