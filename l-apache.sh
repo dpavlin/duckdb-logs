@@ -16,27 +16,35 @@ log2duckdb() {
 
 
 
-	echo "$PREFIX select column00 as site,column01 as ip,column04 as ts,column06 as url,column07 as st,column08 as len,column09 as ref,column10 as ua,filename from read_csv_auto('$logfile',delim=' ', ignore_errors=true,dateformat='%d/%b/%Y',timestampformat='[%d/%b/%Y:%H:%M:%S',filename=true) ;" \
+	if echo $logfile | grep -E '(mjesec|koha)' ; then
+		SQL="$PREFIX select column00 as site,column01 as ip,column04 as ts,column06 as url,column07 as st,column08 as len,column09 as ref,column10 as ua,filename from read_csv_auto('__logfile__',delim=' ', ignore_errors=true,dateformat='%d/%b/%Y',timestampformat='[%d/%b/%Y:%H:%M:%S',filename=true) ;"
+	else
+		SQL="$PREFIX select null as site,column0 as ip,column3 as ts,column5 as url,column6 as st,column7 as len,column8 as ref,column9 as ua,filename from read_csv_auto('__logfile__',delim=' ', ignore_errors=true,dateformat='%d/%b/%Y',timestampformat='[%d/%b/%Y:%H:%M:%S',filename=true) ;"
+	fi
+	echo $SQL | sed "s,__logfile__,$logfile," \
 	| tee /dev/stderr | ./duckdb -box apache.duckdb || (
 		path=$( dirname $logfile | sed 's,/zamd/[^/]*/,/zamd/tmp/,' )
+		test -d $path || mkdir -p $path
 		to=$path/$( basename $logfile | sed 's/\.gz$//' )
 		echo "# FIXMUP $logfile -> $to"
 		gzip -cdf $logfile | sed 's/\\"//g' > $to
-		lines=$( wc -l $to | cut -d' ' -f1)
 		if [ -s $to ] ; then
-			echo "$PREFIX select column00 as site,column01 as ip,column04 as ts,column06 as url,column07 as st,column08 as len,column09 as ref,column10 as ua,filename from read_csv_auto('$to',delim=' ', ignore_errors=true,dateformat='%d/%b/%Y',timestampformat='[%d/%b/%Y:%H:%M:%S',filename=true) ;" \
+			echo $SQL | sed "s,__logfile__,$to," \
 			| tee /dev/stderr | ./duckdb -box apache.duckdb || true
 		else
 			echo "# SKIP, zero size"
 		fi
 
 	)
+
 }
 
 import_logs() {
 	dir=$1
+	patt=$2
+	test -z "$patt" && patt='*access*.log*gz'
 
-	find $dir -name '*access*.log*' -size +1 | while read logfile ; do
+	find $dir -name $patt -size +1 | while read logfile ; do
 		log2duckdb $logfile
 	done
 }
@@ -47,4 +55,5 @@ if [ ! -z "$1" ] ; then
 fi
 
 import_logs /zamd/cluster/mjesec.ffzg.hr/0/var/log/apache2
+import_logs /zamd/oscar/koha.ffzg.hr/0/var/log/apache2/ '*other_vhosts_access*'
 
