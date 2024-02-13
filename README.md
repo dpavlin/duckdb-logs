@@ -12,7 +12,7 @@ import data from log files, if run without parameters, if
 one log file is specified it will be just inserted
 
 
-# geoip.py
+# geo.py
 
 Read maxmind database CSV and import it into duckdb
 based on https://github.com/duckdb/duckdb/discussions/10303
@@ -20,9 +20,9 @@ based on https://github.com/duckdb/duckdb/discussions/10303
 dpavlin@zamd:/zamd/dpavlin/duckdb-logs$ 
 
 . /zamd/dpavlin/duckdb/venv/bin/activate
-python3 geoip.py
+python3 -i geo.py
 
-(venv) dpavlin@zamd:/zamd/dpavlin/duckdb$ python geoip.py reload
+(venv) dpavlin@zamd:/zamd/dpavlin/duckdb$ python geo.py reload
 
 
 # geo2.py
