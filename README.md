@@ -17,9 +17,9 @@ one log file is specified it will be just inserted
 Read maxmind database CSV and import it into duckdb
 based on https://github.com/duckdb/duckdb/discussions/10303
 
-## Install geoip2 library
+## Install duckdb and geoip2 python library
 
-pip install geoip2
+pip install duckdb geoip2
 
 ## activate virtual enviroment
 
