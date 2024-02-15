@@ -38,3 +38,8 @@ duckdb python udf functions which use geoip2 module and mmdb
 dpavlin@zamd:/zamd/dpavlin/duckdb-logs$ python -i geo2.py logs.duckdb rebuild
 
 dpavlin@zamd:/zamd/dpavlin/duckdb-logs$ python -i geo2.py logs.duckdb
+
+
+# dless.sh
+
+re-run last SQL query from ~/.duckdb_history using less as pager
