@@ -1,17 +1,22 @@
 #!/bin/sh
 
-DB=zeek.duckdb
+# usage: zeem2duckdb.sh [yyyy-mm-dd]
+
+date=$( ls -td zeek/* | head -1 | cut -d/ -f2 )
+test ! -z "$1" && date=$1
+DB=zeek-$date.duckdb
+
 what="create or replace table c as"
 test -e $DB && what="insert into c"
+
 
 duckdb() {
 	echo $@ | ./duckdb $DB
 }
 
-ls zeek/2024-02-15/conn.* | while read file ; do
+ls zeek/$date/conn.* | while read file ; do
 
 	found=$( test -f $DB && ./duckdb -csv --noheader $DB "select count(*) as found from c where filename = '$file' ;" | tail -1 | grep -v '^\.' )
-	echo "XXX [$found] ###"
 
 	test -z "$found" && found=0
 
@@ -29,4 +34,4 @@ from read_csv('$file',ignore_errors=true,skip=8,nullstr='-',filename=true,names=
 
 done
 
-./duckdb $DB "copy c to 'zeek-c.parquet'"
+#./duckdb $DB "copy c to 'zeek-$date.parquet'"
