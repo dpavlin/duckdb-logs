@@ -22,7 +22,7 @@ ls zeek/$date/conn.* | while read file ; do
 
 	if [ "$found" = "0" ] ; then
 
-		echo "$what select * \
+		echo "$what select to_timestamp(ts) as ts,orig_h,orig_p,resp_h,resp_p,proto,service,duration,orig_bytes,resp_bytes,conn_state,local_orig,local_resp,missed_bytes,history,orig_pkts,orig_ip_bytes,resp_pkts,resp_ip_bytes,tunnel_parents,vlan,inner_vlan,orig_l2_addr,resp_l2_addr, filename
 from read_csv('$file',ignore_errors=true,skip=8,nullstr='-',filename=true,names=[ts,uid,orig_h,orig_p,resp_h,resp_p,proto,service,duration,orig_bytes,resp_bytes,conn_state,local_orig,local_resp,missed_bytes,history,orig_pkts,orig_ip_bytes,resp_pkts,resp_ip_bytes,tunnel_parents,vlan,inner_vlan,orig_l2_addr,resp_l2_addr]); \
 " | ./duckdb $DB
 
