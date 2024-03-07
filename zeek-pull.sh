@@ -1,1 +1,1 @@
-rsync -rav --include 'conn.*' --exclude '*.log.gz' enesej:/opt/zeek/logs/2024-02* zeek/
+rsync -rav --include 'conn.*' --exclude '*.log.gz' enesej:/opt/zeek/logs/$( date +%Y-%m )* zeek/
