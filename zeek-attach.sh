@@ -12,4 +12,6 @@ echo "create or replace view c as $dates ;"
 #echo "select count(*) as c, time_bucket('1 hour',ts) as t from c GROUP by t order by t ;"
 #echo "select time_bucket('1 hour',ts) as t, count(*), bar(count(*),10000,1000000) as c from c GROUP by t order by t ;"
 
+echo ".timer on"
+
 ) | tee zeek-attach.sql
