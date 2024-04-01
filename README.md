@@ -91,3 +91,13 @@ D select time_bucket('300 seconds',ts) as t,orig_h, resp_h, count(*) as c, sum(o
 
 re-run last SQL query from ~/.duckdb_history using less as pager
 
+
+
+# Cooking with DuckDB
+
+very nice information how to use DuckDB if this repository
+is not enough for you
+
+https://duckdb.hrbrmstr.app/
+
+https://codeberg.org/hrbrmstr/cooking-with-duckdb
