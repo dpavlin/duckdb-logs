@@ -1,9 +1,11 @@
+test -z "$LAST" && LAST=7
+
 (
 
-ls zeek-20*.duckdb | sed "s/^zeek-\(.*\).duckdb/attach 'zeek-\1.duckdb' as c_\1 ;/" \
+ls -tr zeek-20*.duckdb | tail -$LAST | sed "s/^zeek-\(.*\).duckdb/attach 'zeek-\1.duckdb' as c_\1 ;/" \
 	| sed 's/\(c_[0-9]*\)-\([0-9]*\)-\([0-9]*\)/\1_\2_\3/' 
 
-dates=$( ls zeek-20*.duckdb | sed "s/^zeek-\(.*\).duckdb/\1/" | sed -e 's/^/select * from c_/' -e 's/$/.c union /' \
+dates=$( ls -tr zeek-20*.duckdb | tail -$LAST | sed "s/^zeek-\(.*\).duckdb/\1/" | sed -e 's/^/select * from c_/' -e 's/$/.c union /' \
 	| sed 's/\(c_[0-9]*\)-\([0-9]*\)-\([0-9]*\)/\1_\2_\3/' \
 	| tr -d '\n' | sed 's/.c union $/.c ;/' )
 echo "create or replace view c as $dates ;"
