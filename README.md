@@ -6,9 +6,9 @@ Reading log files to duckdb to query them using SQL
 
 init schema based on log file
 
-## l.sh
+## l-nginx.sh
 
-import data from log files, if run without parameters, if
+import data from nginx log files, if run without parameters, if
 one log file is specified it will be just inserted
 
 # duckdb UDF in python
